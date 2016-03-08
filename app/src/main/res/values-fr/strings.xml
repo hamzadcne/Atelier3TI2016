@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Atelier 3TI</string>
+    <string name="charger">Charger</string>
+    <string name="login">S\'authentifier</string>
+</resources>

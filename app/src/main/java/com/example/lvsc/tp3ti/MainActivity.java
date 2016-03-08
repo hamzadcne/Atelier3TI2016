@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ import Models.Pharmacie;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
+    String username;
+    String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +62,32 @@ public class MainActivity extends AppCompatActivity {
         */
     }
 
+    public void onLoginClick(View view){
+
+        EditText usernameTxt=(EditText)findViewById(R.id.emailTxt);
+        EditText passwordTxt=(EditText)findViewById(R.id.passwordTxt);
+
+
+        username=usernameTxt.getText().toString();
+        password=passwordTxt.getText().toString();
+        if(username.isEmpty())
+            Toast.makeText(getBaseContext(),"Entrez votre username",Toast.LENGTH_SHORT).show();
+        else if(password.isEmpty())
+            Toast.makeText(getBaseContext(),"Entrez votre mot de passe",Toast.LENGTH_SHORT).show();
+        else {
+            String urlString = "http://192.168.137.1:8090/pharma/login.php";
+            LoginTask loginTask = new LoginTask();
+            loginTask.execute(urlString);
+        }
+    }
+
 
     public void onLoadClick(View view) {
         String urlString="http://192.168.137.1:8090/pharma/pharmacies.php";
         BackgroundTask backgroundTask=new BackgroundTask();
         backgroundTask.execute(urlString);
-
     }
+
 
     private class BackgroundTask extends AsyncTask<String,Void,String>
     {
@@ -140,6 +163,63 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+    private class LoginTask extends AsyncTask<String,Void,String>
+    {
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection c=null;
+            try {
+                String urlString=params[0];
+                URL url=new URL(urlString);
+                c=(HttpURLConnection)url.openConnection();
+                c.setRequestMethod("POST");
+                c.setConnectTimeout(15000 /* milliseconds */);
+                c.setDoInput(true);
+                c.setDoOutput(true);
+                c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                String s = "username="+username+"&password=" + password;
+
+                c.setFixedLengthStreamingMode(s.getBytes().length);
+                PrintWriter out = new PrintWriter(c.getOutputStream());
+                out.print(s);
+                out.close();
+
+                c.connect();
+                int mStatusCode = c.getResponseCode();
+                switch (mStatusCode) {
+                    case 200:
+                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line).append("\n");
+                        }
+                        br.close();
+                        String result =  sb.toString();
+                        return result;
+                }
+                return "";
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                return "Error connecting to server";
+            } finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {
+//                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //super.onPostExecute(s);
+            TextView textView = (TextView)findViewById(R.id.resultTxt);
+            textView.setText(s);
         }
     }
 }
