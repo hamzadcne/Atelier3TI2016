@@ -2,4 +2,11 @@
     <string name="app_name">Atelier 3TI</string>
     <string name="charger">Charger</string>
     <string name="login">S\'authentifier</string>
+    <string name="email_txt">Email</string>
+    <string name="password_txt">Password</string>
+    <string name="action_settings">Settings</string>
+    <string name="searh_distance_txt">Search Distance</string>
+    <string name="app_language_txt">Application Language</string>
+    <string name="action_refresh">Rafraichir</string>
+    <string name="offline_mode_pref_txt">Offline Mode</string>
 </resources>

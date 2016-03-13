@@ -1,9 +1,15 @@
 package com.example.lvsc.tp3ti;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -41,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String langue = preferences.getString(getString(R.string.app_language_pref), "en");
+
+
+        SharedPreferences SP = PreferenceManager.
+                getDefaultSharedPreferences(getBaseContext());
+        String searchDistanceStr = SP.getString(getString(R.string.search_distance_pref), "500");
+
+        int searchDistanceValue = Integer.valueOf(searchDistanceStr);
         listView= (ListView)findViewById(R.id.listView);
         /*
         String[] myArray=new String[]{
@@ -60,6 +75,34 @@ public class MainActivity extends AppCompatActivity {
                 myArray);
         listView.setAdapter(adapter);
         */
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+
+            startActivity(new Intent(this,ConfigActivity.class));
+
+        }else if(id==R.id.action_refresh){
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void onLoginClick(View view){

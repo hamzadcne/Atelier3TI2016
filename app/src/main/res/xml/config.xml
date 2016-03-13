@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:inputType="number"
+        android:title="@string/search_distance_txt"
+        android:key="@string/search_distance_pref"
+        android:summary="Search distance for Pharmacies"
+        android:defaultValue="@string/search_distance_default_value"/>
+    <SwitchPreference android:title="@string/offline_mode_pref_txt"
+        android:defaultValue="false"
+        android:summary="This option if selected will not allow connection to the internet."
+        android:key="@string/offline_mode_pref"
+        />
+    <ListPreference
+        android:title="@string/app_language_txt"
+        android:summary="Select the application language"
+        android:key="@string/app_language_pref"
+        android:defaultValue="@string/language_default_value"
+        android:entries="@array/language_list_array"
+        android:entryValues="@array/language_list_values" />
+</PreferenceScreen>
