@@ -7,4 +7,7 @@
     <string name="searh_distance_txt">Search Distance</string>
     <string name="app_language_txt">Application Language</string>
     <string name="offline_mode_pref_txt">Offline Mode</string>
+    <string name="search_distance_sum">Search distance for Pharmacies</string>
+    <string name="offline_mode_sum">This option if selected will not allow connection to the internet.</string>
+    <string name="app_language_sum">Select the application language</string>
 </resources>

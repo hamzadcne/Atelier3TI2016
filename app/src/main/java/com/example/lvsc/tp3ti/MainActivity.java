@@ -1,13 +1,19 @@
 package com.example.lvsc.tp3ti;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.speech.tts.Voice;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +25,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -31,31 +42,31 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Adapters.PharmacieArrayAdapter;
 import Models.Pharmacie;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ListView listView;
     String username;
     String password;
+    String currentLocale;
+    GoogleMap map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String language=setLocaleFromPreferences();
+        currentLocale=language;
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String langue = preferences.getString(getString(R.string.app_language_pref), "en");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-
-        SharedPreferences SP = PreferenceManager.
-                getDefaultSharedPreferences(getBaseContext());
-        String searchDistanceStr = SP.getString(getString(R.string.search_distance_pref), "500");
-
-        int searchDistanceValue = Integer.valueOf(searchDistanceStr);
         listView= (ListView)findViewById(R.id.listView);
         /*
         String[] myArray=new String[]{
@@ -75,10 +86,40 @@ public class MainActivity extends AppCompatActivity {
                 myArray);
         listView.setAdapter(adapter);
         */
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
     }
-
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String language = preferences.getString(getString(R.string.app_language_pref), "en");
+        if(!language.equals(currentLocale))
+            recreate();
+    }
+    private String getSelectedLocale()
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String language = preferences.getString(getString(R.string.app_language_pref), "en");
+        return language;
+    }
+    private String setLocaleFromPreferences()
+    {
+        Resources res = this.getResources();
+        // Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        String language=getSelectedLocale();
+        conf.locale = new Locale(language);
+        res.updateConfiguration(conf, dm);
+        return language;
+    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // refresh your views here
+        super.onConfigurationChanged(newConfig);
+        this.recreate();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -129,6 +170,11 @@ public class MainActivity extends AppCompatActivity {
         String urlString="http://192.168.137.1:8090/pharma/pharmacies.php";
         BackgroundTask backgroundTask=new BackgroundTask();
         backgroundTask.execute(urlString);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map=googleMap;
     }
 
 
@@ -202,6 +248,13 @@ public class MainActivity extends AppCompatActivity {
                         R.layout.liste_layout,
                         listePharma);
                 listView.setAdapter(adapter);
+                for (int i=0;i<listePharma.length;i++)
+                {
+                    Pharmacie pharmacie =listePharma[i];
+                    LatLng position = new LatLng(pharmacie.getLatitude(),
+                            pharmacie.getLongitude());
+                    map.addMarker(new MarkerOptions().position(position).title(pharmacie.getNom()));
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

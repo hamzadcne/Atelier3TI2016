@@ -1,6 +1,8 @@
 package com.example.lvsc.tp3ti;
 
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,16 +17,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    String currentLocale="en";
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_settings);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+        currentLocale=getSelectedLocale();
 
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
         setupActionBar();
     }
     private void setupActionBar() {
@@ -36,9 +43,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         }
     }
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    private String getSelectedLocale()
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String language = preferences.getString(getString(R.string.app_language_pref), "en");
+        return language;
+    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String language=getSelectedLocale();
+        if(!currentLocale.equals(language))
+            recreate();
 
-
+    }
+    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String stringValue = newValue.toString();
@@ -54,15 +75,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
+//                String prefKey=preference.getKey();
+//                if(prefKey.equals(getString(R.string.app_language_pref)))
+//                {
+//                    //String language=getSelectedLocale();
+//                    if(!currentLocale.equals(newValue))
+//                        recreate();
+//                }
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
+
             }
             return true;
         }
     };
-    private static void bindPreferenceSummaryToValue(Preference preference) {
+    protected void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -82,9 +111,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
             setHasOptionsMenu(true);
+            SettingsActivity activity=((SettingsActivity) getActivity());
 
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.search_distance_pref)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.app_language_pref)));
+            activity.bindPreferenceSummaryToValue(findPreference(getString(R.string.search_distance_pref)));
+            activity.bindPreferenceSummaryToValue(findPreference(getString(R.string.app_language_pref)));
         }
     }
 }

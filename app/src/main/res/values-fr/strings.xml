@@ -3,10 +3,13 @@
     <string name="charger">Charger</string>
     <string name="login">S\'authentifier</string>
     <string name="email_txt">Email</string>
-    <string name="password_txt">Password</string>
-    <string name="action_settings">Settings</string>
-    <string name="searh_distance_txt">Search Distance</string>
-    <string name="app_language_txt">Application Language</string>
+    <string name="password_txt">Mot de Passe</string>
+    <string name="action_settings">Configuration</string>
+    <string name="search_distance_txt">Distance de recherche</string>
+    <string name="app_language_txt">Langue de l\'Application</string>
     <string name="action_refresh">Rafraichir</string>
-    <string name="offline_mode_pref_txt">Offline Mode</string>
+    <string name="offline_mode_pref_txt">Mode Hors Ligne</string>
+    <string name="search_distance_sum">Distance de Recherche pour les Pharmacies</string>
+    <string name="offline_mode_sum">Interdire l\'accès à Internet</string>
+    <string name="app_language_sum">Selectionner la langue de l\'application</string>
 </resources>

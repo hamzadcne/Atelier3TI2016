@@ -1,9 +1,11 @@
 package Models;
 
+import com.orm.SugarRecord;
+
 /**
- * Created by LVSC on 01-03-2016.
+ * Created by LVSC on 01-03-20  16.
  */
-public class Pharmacie {
+public class Pharmacie{
 
     private String Nom;
     private String Ville;
