@@ -10,4 +10,6 @@
     <string name="search_distance_sum">Search distance for Pharmacies</string>
     <string name="offline_mode_sum">This option if selected will not allow connection to the internet.</string>
     <string name="app_language_sum">Select the application language</string>
+    <string name="load_img">Image</string>
+    <string name="image">Image</string>
 </resources>

@@ -28,6 +28,7 @@ public class ConfigActivity extends AppCompatPreferenceActivity{
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new ConfigFragment()).commit();
         setupActionBar();
+
     }
 
     private void setupActionBar() {
@@ -69,7 +70,7 @@ public class ConfigActivity extends AppCompatPreferenceActivity{
             {
                 preference.setSummary(stringValue);
             }
-            return false;
+            return true;
         }
     };
 
@@ -81,13 +82,26 @@ public class ConfigActivity extends AppCompatPreferenceActivity{
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.config);
 
+
             ConfigActivity activity = (ConfigActivity)getActivity();
+            Preference.OnPreferenceChangeListener onPreferenceChangeListener =
+                    activity.bindSummaryToValueListner;
 
-            findPreference(getString(R.string.search_distance_pref))
-                    .setOnPreferenceChangeListener(activity.bindSummaryToValueListner);
+            Preference searchPref=findPreference(getString(R.string.search_distance_pref));
+            Preference languagePref=findPreference(getString(R.string.app_language_pref));
 
-            findPreference(getString(R.string.app_language_pref))
-                    .setOnPreferenceChangeListener(activity.bindSummaryToValueListner);
+            searchPref.setOnPreferenceChangeListener(onPreferenceChangeListener);
+            languagePref.setOnPreferenceChangeListener(onPreferenceChangeListener);
+
+            SharedPreferences preferences =
+                    PreferenceManager.getDefaultSharedPreferences(searchPref.getContext());
+            String newSearchValue = preferences.getString(getString(R.string.search_distance_pref), getString(R.string.search_distance_default_value));
+            onPreferenceChangeListener.onPreferenceChange(searchPref, newSearchValue);
+
+            String newLanguageValue = preferences.getString(getString(R.string.app_language_pref),getString(R.string.language_default_value));
+            onPreferenceChangeListener.onPreferenceChange(languagePref, newLanguageValue);
+
+
         }
     }
 }

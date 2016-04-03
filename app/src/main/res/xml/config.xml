@@ -6,7 +6,8 @@
         android:key="@string/search_distance_pref"
         android:summary="@string/search_distance_sum"
         android:defaultValue="@string/search_distance_default_value"/>
-    <SwitchPreference android:title="@string/offline_mode_pref_txt"
+    <SwitchPreference
+        android:title="@string/offline_mode_pref_txt"
         android:defaultValue="false"
         android:summary="@string/offline_mode_sum"
         android:key="@string/offline_mode_pref"

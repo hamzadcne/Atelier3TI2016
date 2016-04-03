@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.speech.tts.Voice;
+import android.support.v4.animation.ValueAnimatorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String language=setLocaleFromPreferences();
+        setLocaleFromPreferences();
+        String language = getSelectedLocale();
         currentLocale=language;
         setContentView(R.layout.activity_main);
 
@@ -91,24 +93,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String language = preferences.getString(getString(R.string.app_language_pref), "en");
+        String language = getSelectedLocale();
         if(!language.equals(currentLocale))
             recreate();
     }
     private String getSelectedLocale()
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String language = preferences.getString(getString(R.string.app_language_pref), "en");
+        String language = preferences.getString(getString(R.string.app_language_pref), getString(R.string.language_default_value));
+
         return language;
     }
+
+    private void setSharedPreference(String key,String value)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        preferences.edit().putString(key, value);
+    }
+
     private String setLocaleFromPreferences()
     {
+        String language=getSelectedLocale();
+
         Resources res = this.getResources();
         // Change locale settings in the app.
         DisplayMetrics dm = res.getDisplayMetrics();
         android.content.res.Configuration conf = res.getConfiguration();
-        String language=getSelectedLocale();
         conf.locale = new Locale(language);
         res.updateConfiguration(conf, dm);
         return language;
@@ -136,11 +146,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             startActivity(new Intent(this,ConfigActivity.class));
-
-        }else if(id==R.id.action_refresh){
-
+        }else if(id==R.id.action_image){
+            startActivity(new Intent(this,ImageActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

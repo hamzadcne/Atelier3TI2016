@@ -12,4 +12,6 @@
     <string name="search_distance_sum">Distance de Recherche pour les Pharmacies</string>
     <string name="offline_mode_sum">Interdire l\'accès à Internet</string>
     <string name="app_language_sum">Selectionner la langue de l\'application</string>
+    <string name="load_img">Image</string>
+    <string name="image">Image</string>
 </resources>
