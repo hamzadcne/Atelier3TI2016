@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 import Adapters.PharmacieArrayAdapter;
 import Models.Pharmacie;
@@ -61,8 +62,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLocaleFromPreferences();
+
         String language = getSelectedLocale();
         currentLocale=language;
+
         setContentView(R.layout.activity_main);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -123,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         res.updateConfiguration(conf, dm);
         return language;
     }
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        // refresh your views here
-        super.onConfigurationChanged(newConfig);
-        this.recreate();
-    }
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        // refresh your views here
+//        super.onConfigurationChanged(newConfig);
+//        this.recreate();
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -324,6 +327,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             //super.onPostExecute(s);
             TextView textView = (TextView)findViewById(R.id.resultTxt);
             textView.setText(s);
+
+//            SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//            preferences.edit().putString("username_pref",username);
+//            preferences.edit().putString("password_pref",password);
+//
+//            preferences.edit().commit();
+//
+//            String user = preferences.getString("username_pref","");
+
         }
     }
 }

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:inputType="number"
-        android:title="@string/search_distance_txt"
         android:key="@string/search_distance_pref"
+        android:title="@string/search_distance_txt"
         android:summary="@string/search_distance_sum"
-        android:defaultValue="@string/search_distance_default_value"/>
+        android:defaultValue="@string/search_distance_default_value"
+
+        android:inputType="number"/>
     <SwitchPreference
-        android:title="@string/offline_mode_pref_txt"
-        android:defaultValue="false"
-        android:summary="@string/offline_mode_sum"
         android:key="@string/offline_mode_pref"
+        android:title="@string/offline_mode_pref_txt"
+        android:summary="@string/offline_mode_sum"
+        android:defaultValue="false"
+
         />
     <ListPreference
+        android:key="@string/app_language_pref"
         android:title="@string/app_language_txt"
         android:summary="@string/app_language_sum"
-        android:key="@string/app_language_pref"
         android:defaultValue="@string/language_default_value"
+
         android:entries="@array/language_list_array"
         android:entryValues="@array/language_list_values" />
 </PreferenceScreen>
