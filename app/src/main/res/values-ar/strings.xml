@@ -12,4 +12,5 @@
     <string name="app_language_sum">Select the application language</string>
     <string name="load_img">Image</string>
     <string name="image">Image</string>
+    <string name="drawer_txt">Drawer</string>
 </resources>

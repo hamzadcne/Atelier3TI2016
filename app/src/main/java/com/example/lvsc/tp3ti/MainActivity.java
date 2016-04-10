@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if(id==R.id.action_image){
             startActivity(new Intent(this,ImageActivity.class));
         }
+        else if(id==R.id.action_drawer)
+        {
+            startActivity(new Intent(this,Drawer2Activity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }

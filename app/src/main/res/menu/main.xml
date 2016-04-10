@@ -16,4 +16,10 @@
         android:title="@string/image"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_drawer"
+        android:title="@string/drawer_txt"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

@@ -19,19 +19,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".SettingsActivity"-->
-            <!--android:configChanges="locale"-->
-            <!--android:label="@string/action_settings" />-->
+        <!-- <activity -->
+        <!-- android:name=".SettingsActivity" -->
+        <!-- android:configChanges="locale" -->
+        <!-- android:label="@string/action_settings" /> -->
         <activity android:name=".AppCompatPreferenceActivity" />
         <activity
             android:name=".ConfigActivity"
             android:label="@string/action_settings" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ImageActivity" android:label="@string/image"/>
+        <activity
+            android:name=".ImageActivity"
+            android:label="@string/image" />
+        <activity android:name=".DrawerActivity" />
+        <activity android:name=".Drawer2Activity"></activity>
     </application>
 
 </manifest>

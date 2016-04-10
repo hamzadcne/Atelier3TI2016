@@ -29,17 +29,18 @@ public class ImageActivity extends AppCompatActivity {
     public void onLoadImageClick(View view) {
         Intent intent = new Intent();
         // Show only images, no videos or anything else
+
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
         // Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Call"), PICK_IMAGE_REQUEST);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode ==  RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
