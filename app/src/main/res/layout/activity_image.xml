@@ -13,6 +13,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:text="@string/charger"
     android:onClick="onLoadImageClick"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/call_txt"
+        android:onClick="onCallClick"/>
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -33,4 +33,7 @@
     <string name="load_img">Image</string>
     <string name="image">Image</string>
     <string name="drawer_txt">Drawer</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_closed">Drawer Closed</string>
+    <string name="call_txt">Call</string>
 </resources>

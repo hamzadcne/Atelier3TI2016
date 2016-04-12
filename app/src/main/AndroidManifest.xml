@@ -3,6 +3,7 @@
     package="com.example.lvsc.tp3ti">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"

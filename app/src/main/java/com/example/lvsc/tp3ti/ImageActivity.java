@@ -32,9 +32,14 @@ public class ImageActivity extends AppCompatActivity {
 
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-
         // Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(intent, "Call"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+    public void onCallClick(View view) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:0377778888"));
+        startActivity(Intent.createChooser(intent, "Call Number"));
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -73,11 +78,11 @@ public class ImageActivity extends AppCompatActivity {
 //                int columnIndex = cursor.getColumnIndex(projection[0]);
 //                String picturePath = cursor.getString(columnIndex); // returns null
 //                cursor.close();
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
+
+
 }
