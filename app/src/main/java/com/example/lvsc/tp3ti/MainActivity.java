@@ -1,11 +1,15 @@
 package com.example.lvsc.tp3ti;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -43,6 +47,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,15 +108,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String getSelectedLocale()
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String language = preferences.getString(getString(R.string.app_language_pref), getString(R.string.language_default_value));
-
-        return language;
+        return preferences.getString(getString(R.string.app_language_pref), getString(R.string.language_default_value));
     }
 
     private void setSharedPreference(String key,String value)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         preferences.edit().putString(key, value);
+        preferences.edit().apply();
     }
 
     private String setLocaleFromPreferences()
@@ -166,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         EditText usernameTxt=(EditText)findViewById(R.id.emailTxt);
         EditText passwordTxt=(EditText)findViewById(R.id.passwordTxt);
 
-
         username=usernameTxt.getText().toString();
         password=passwordTxt.getText().toString();
         if(username.isEmpty())
@@ -182,9 +185,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     public void onLoadClick(View view) {
-        String urlString="http://192.168.137.1:8090/pharma/pharmacies.php";
-        BackgroundTask backgroundTask=new BackgroundTask();
-        backgroundTask.execute(urlString);
+        boolean hasConnection = haveNetworkConnection();
+        if(hasConnection) {
+            String urlString = "http://192.168.137.1:8090/pharma/pharmacies.php";
+            BackgroundTask backgroundTask = new BackgroundTask();
+            backgroundTask.execute(urlString);
+        }else {
+            List<Pharmacie> pharmaciesDb= Pharmacie.listAll(Pharmacie.class);
+            PharmacieArrayAdapter adapter = new PharmacieArrayAdapter(
+                    MainActivity.this,
+                    R.layout.liste_layout,
+                    pharmaciesDb.toArray(new Pharmacie[pharmaciesDb.size()]));
+            listView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -192,7 +205,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map=googleMap;
     }
 
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
 
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        //Network[] networks=cm.getAllNetworks();
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
     private class BackgroundTask extends AsyncTask<String,Void,String>
     {
         @Override
@@ -217,8 +247,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             sb.append(line).append("\n");
                         }
                         br.close();
-                        String result =  sb.toString();
-                    return result;
+                        return sb.toString();
                 }
             return "";
             } catch (Exception ex) {
@@ -241,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            TextView textView = (TextView)findViewById(R.id.resultTxt);
 //            textView.setText(s);
             ArrayList<Pharmacie> pharmacies= new ArrayList<Pharmacie>();
-
             try {
                 Gson gson = new Gson();
                 Pharmacie[] listePharma= gson.fromJson(s, Pharmacie[].class);
@@ -263,9 +291,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         R.layout.liste_layout,
                         listePharma);
                 listView.setAdapter(adapter);
-                for (int i=0;i<listePharma.length;i++)
-                {
-                    Pharmacie pharmacie =listePharma[i];
+                for (Pharmacie pharmacie : listePharma) {
+                    pharmacie.save();
                     LatLng position = new LatLng(pharmacie.getLatitude(),
                             pharmacie.getLongitude());
                     map.addMarker(new MarkerOptions().position(position).title(pharmacie.getNom()));
@@ -308,8 +335,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             sb.append(line).append("\n");
                         }
                         br.close();
-                        String result =  sb.toString();
-                        return result;
+                        return sb.toString();
                 }
                 return "";
             } catch (Exception ex) {

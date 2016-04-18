@@ -1,11 +1,12 @@
 package Models;
 
+
 import com.orm.SugarRecord;
 
 /**
  * Created by LVSC on 01-03-20  16.
  */
-public class Pharmacie{
+public class Pharmacie extends SugarRecord {
 
     private String Nom;
     private String Ville;
@@ -43,7 +44,9 @@ public class Pharmacie{
     public void setLongitude(Double longitude) {
         Longitude = longitude;
     }
+    public Pharmacie(){
 
+    }
     public Pharmacie(String nom, String ville, Double latitude, Double longitude) {
         Nom = nom;
         Ville = ville;
