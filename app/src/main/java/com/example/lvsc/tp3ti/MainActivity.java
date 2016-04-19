@@ -161,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             startActivity(new Intent(this,Drawer2Activity.class));
         }
+        else if(id==R.id.action_gps)
+        {
+            startActivity(new Intent(this,GpsActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -192,10 +196,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             backgroundTask.execute(urlString);
         }else {
             List<Pharmacie> pharmaciesDb= Pharmacie.listAll(Pharmacie.class);
+            List<Pharmacie> pharmaDb = Pharmacie.find(Pharmacie.class, "Nom = ?", "pharma1");
             PharmacieArrayAdapter adapter = new PharmacieArrayAdapter(
                     MainActivity.this,
                     R.layout.liste_layout,
-                    pharmaciesDb.toArray(new Pharmacie[pharmaciesDb.size()]));
+                    pharmaciesDb.toArray(new Pharmacie[pharmaciesDb.size()])
+            );
             listView.setAdapter(adapter);
         }
     }
@@ -267,8 +273,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         protected void onPostExecute(String s) {
             //super.onPostExecute(s);
-//            TextView textView = (TextView)findViewById(R.id.resultTxt);
-//            textView.setText(s);
+
             ArrayList<Pharmacie> pharmacies= new ArrayList<Pharmacie>();
             try {
                 Gson gson = new Gson();
@@ -292,6 +297,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         listePharma);
                 listView.setAdapter(adapter);
                 for (Pharmacie pharmacie : listePharma) {
+//
+//                    List<Pharmacie> listaPharma= Pharmacie.listAll(Pharmacie.class);
+//                    Gson gson1 = new Gson();
+//                    String listePharmaGson = gson1.toJson(listePharma);
                     pharmacie.save();
                     LatLng position = new LatLng(pharmacie.getLatitude(),
                             pharmacie.getLongitude());
@@ -310,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             HttpURLConnection c=null;
             try {
                 String urlString=params[0];
-                URL url=new URL(urlString);
+                URL url = new URL(urlString);
                 c=(HttpURLConnection)url.openConnection();
                 c.setRequestMethod("POST");
                 c.setConnectTimeout(15000 /* milliseconds */);

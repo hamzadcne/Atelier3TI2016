@@ -44,6 +44,7 @@ public class Pharmacie extends SugarRecord {
     public void setLongitude(Double longitude) {
         Longitude = longitude;
     }
+
     public Pharmacie(){
 
     }

@@ -1,10 +1,14 @@
 package com.example.lvsc.tp3ti;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbInterface;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;

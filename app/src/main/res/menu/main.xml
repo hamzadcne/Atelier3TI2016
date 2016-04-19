@@ -22,4 +22,9 @@
         android:title="@string/drawer_txt"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_gps"
+        android:title="@string/location_txt"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>
